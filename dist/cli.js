@@ -30,7 +30,9 @@ function loadGraph() {
         console.log("Run: nx graph --file=graph.json");
         process.exit(1);
     }
-    return JSON.parse(fs.readFileSync(file, "utf-8"));
+    const rawGraph = JSON.parse(fs.readFileSync(file, "utf-8"));
+    const graph = rawGraph.graph ?? rawGraph;
+    return graph;
 }
 function detectCircularDeps(graph) {
     const visited = new Set();
