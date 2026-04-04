@@ -5,8 +5,8 @@ import chalk from "chalk";
 const program = new Command();
 
 program
-  .name("nx-archviz")
-  .description("Nx architecture analyzer")
+  .name("nx-visualizer")
+  .description("Nx visualizer")
   .version("1.0.0");
 
 type Graph = {
