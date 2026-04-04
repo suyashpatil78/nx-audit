@@ -36,22 +36,27 @@ function loadGraph() {
 }
 function detectCircularDeps(graph) {
     const visited = new Set();
-    const stack = new Set();
+    const stack = [];
     const cycles = [];
     function dfs(node) {
-        if (stack.has(node)) {
-            cycles.push(node);
+        if (stack.includes(node)) {
+            const cycleStartIndex = stack.indexOf(node);
+            const cycle = [
+                ...stack.slice(cycleStartIndex),
+                node
+            ];
+            cycles.push(cycle);
             return;
         }
         if (visited.has(node))
             return;
         visited.add(node);
-        stack.add(node);
+        stack.push(node);
         const deps = graph.dependencies[node] || [];
         for (const dep of deps) {
             dfs(dep.target);
         }
-        stack.delete(node);
+        stack.pop();
     }
     Object.keys(graph.nodes).forEach(dfs);
     return cycles;
