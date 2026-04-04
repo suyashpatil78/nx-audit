@@ -15,24 +15,6 @@ type Graph = {
   dependencies: Record<string, { target: string }[]>;
 };
 
-const DEFAULT_LAYERS = {
-  apps: ["apps/"],
-  features: ["libs/features/"],
-  shared: ["libs/shared/"],
-  core: ["libs/core/"],
-};
-
-function detectLayer(projectName: string) {
-  for (const [layer, prefixes] of Object.entries(DEFAULT_LAYERS)) {
-    for (const prefix of prefixes) {
-      if (projectName.includes(prefix)) {
-        return layer;
-      }
-    }
-  }
-  return "unknown";
-}
-
 function loadGraph(): Graph {
   const file = "graph.json";
 
@@ -96,33 +78,6 @@ function detectOrphans(graph: Graph) {
   );
 }
 
-function detectLayerViolations(graph: Graph) {
-  const violations: string[] = [];
-
-  const layerOrder = ["apps", "features", "shared", "core"];
-
-  Object.entries(graph.dependencies).forEach(
-    ([source, deps]) => {
-      const sourceLayer = detectLayer(source);
-
-      deps.forEach(({ target }) => {
-        const targetLayer = detectLayer(target);
-
-        if (
-          layerOrder.indexOf(sourceLayer) <
-          layerOrder.indexOf(targetLayer)
-        ) {
-          violations.push(
-            `${source} → ${target}`
-          );
-        }
-      });
-    }
-  );
-
-  return violations;
-}
-
 program.command("analyze").action(() => {
   const graph = loadGraph();
 
@@ -132,7 +87,6 @@ program.command("analyze").action(() => {
 
   const circular = detectCircularDeps(graph);
   const orphans = detectOrphans(graph);
-  const violations = detectLayerViolations(graph);
 
   console.log(
     chalk.yellow(
@@ -150,16 +104,6 @@ program.command("analyze").action(() => {
 
   orphans.forEach((o) =>
     console.log(chalk.gray(` - ${o}`))
-  );
-
-  console.log(
-    chalk.red(
-      `\nLayer violations: ${violations.length}`
-    )
-  );
-
-  violations.forEach((v) =>
-    console.log(chalk.gray(` - ${v}`))
   );
 
   console.log(

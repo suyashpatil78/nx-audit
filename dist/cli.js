@@ -7,22 +7,6 @@ program
     .name("nx-audit")
     .description("Nx visualizer for auditing your workspace")
     .version("1.0.0");
-const DEFAULT_LAYERS = {
-    apps: ["apps/"],
-    features: ["libs/features/"],
-    shared: ["libs/shared/"],
-    core: ["libs/core/"],
-};
-function detectLayer(projectName) {
-    for (const [layer, prefixes] of Object.entries(DEFAULT_LAYERS)) {
-        for (const prefix of prefixes) {
-            if (projectName.includes(prefix)) {
-                return layer;
-            }
-        }
-    }
-    return "unknown";
-}
 function loadGraph() {
     const file = "graph.json";
     if (!fs.existsSync(file)) {
@@ -68,33 +52,15 @@ function detectOrphans(graph) {
     });
     return Object.keys(graph.nodes).filter((node) => !inbound.has(node));
 }
-function detectLayerViolations(graph) {
-    const violations = [];
-    const layerOrder = ["apps", "features", "shared", "core"];
-    Object.entries(graph.dependencies).forEach(([source, deps]) => {
-        const sourceLayer = detectLayer(source);
-        deps.forEach(({ target }) => {
-            const targetLayer = detectLayer(target);
-            if (layerOrder.indexOf(sourceLayer) <
-                layerOrder.indexOf(targetLayer)) {
-                violations.push(`${source} → ${target}`);
-            }
-        });
-    });
-    return violations;
-}
 program.command("analyze").action(() => {
     const graph = loadGraph();
     console.log(chalk.blue("\nAnalyzing Nx workspace architecture...\n"));
     const circular = detectCircularDeps(graph);
     const orphans = detectOrphans(graph);
-    const violations = detectLayerViolations(graph);
     console.log(chalk.yellow(`Circular dependencies: ${circular.length}`));
     circular.forEach((c) => console.log(chalk.gray(` - ${c}`)));
     console.log(chalk.yellow(`\nOrphan libraries: ${orphans.length}`));
     orphans.forEach((o) => console.log(chalk.gray(` - ${o}`)));
-    console.log(chalk.red(`\nLayer violations: ${violations.length}`));
-    violations.forEach((v) => console.log(chalk.gray(` - ${v}`)));
     console.log(chalk.green("\nAnalysis complete.\n"));
 });
 program.parse(process.argv);

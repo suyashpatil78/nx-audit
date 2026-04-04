@@ -1,4 +1,4 @@
-# nx-audit
+# [nx-audit](https://www.npmjs.com/package/nx-audit)
 
 CLI that reads an Nx project graph and reports **circular dependencies**, **orphan projects** (nothing depends on them), and **layer violations** against a simple apps → features → shared → core model.
 
