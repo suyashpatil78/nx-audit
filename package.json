@@ -1,11 +1,11 @@
 {
-  "name": "nx-visualizer",
+  "name": "nx-audit",
   "version": "1.0.0",
   "description": "",
   "main": "src/cli.ts",
   "type": "module",
   "bin": {
-    "nx-visualizer": "./dist/cli.js"
+    "nx-audit": "./dist/cli.js"
   },
   "scripts": {
     "build": "tsc",

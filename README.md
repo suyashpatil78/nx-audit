@@ -1,4 +1,4 @@
-# nx-visualizer
+# nx-audit
 
 CLI that reads an Nx project graph and reports **circular dependencies**, **orphan projects** (nothing depends on them), and **layer violations** against a simple apps → features → shared → core model.
 
@@ -35,7 +35,7 @@ This creates `graph.json` in the current directory. The analyzer expects that ex
 Run the built CLI directly:
 
 ```bash
-npx nx-visualizer analyze
+npx nx-audit analyze
 ```
 
 ## What you get

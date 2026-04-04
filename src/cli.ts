@@ -6,8 +6,8 @@ import chalk from "chalk";
 const program = new Command();
 
 program
-  .name("nx-visualizer")
-  .description("Nx visualizer")
+  .name("nx-audit")
+  .description("Nx visualizer for auditing your workspace")
   .version("1.0.0");
 
 type Graph = {
