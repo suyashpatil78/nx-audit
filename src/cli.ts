@@ -69,10 +69,15 @@ function detectCircularDeps(graph: Graph) {
 function detectOrphans(graph: Graph) {
   const inbound = new Set<string>();
 
+  /*
+  * graph.dependencies has list of projects and target represents the dependencies of the project
+  * Check and add the projects which are dependencies of other projects
+  */
   Object.values(graph.dependencies).forEach((deps) => {
     deps.forEach((dep) => inbound.add(dep.target));
   });
 
+  // List the projects which are not dependencies of other projects
   return Object.keys(graph.nodes).filter(
     (node) => !inbound.has(node)
   );

@@ -1,6 +1,6 @@
 # [nx-audit](https://www.npmjs.com/package/nx-audit)
 
-CLI that reads an Nx project graph and reports **circular dependencies**, **orphan projects** (nothing depends on them), and **layer violations** against a simple apps → features → shared → core model.
+CLI that reads an Nx project graph and reports **circular dependencies** and **orphan projects** (nothing depends on them).
 
 ## Prerequisites
 
@@ -44,26 +44,6 @@ npx nx-audit analyze
 |--------|--------|
 | **Circular dependencies** | Projects involved in dependency cycles (first node hit when a cycle is detected). |
 | **Orphan libraries** | Projects that never appear as a dependency target—often unused entry points or mis-wired libs. |
-| **Layer violations** | Edges that go “up” the stack (e.g. a lower layer depending on a higher one). |
-
-### Default layers
-
-Layers are inferred from project names/paths using these prefixes:
-
-| Layer | Path hints |
-|--------|------------|
-| `apps` | `apps/` |
-| `features` | `libs/features/` |
-| `shared` | `libs/shared/` |
-| `core` | `libs/core/` |
-
-Anything else is treated as `unknown` for layer rules.
-
-Allowed direction is **apps → features → shared → core** (higher index must not depend on lower index in that list). Violations are listed as `source → target`.
-
-## Customizing layers
-
-The prefix map lives in `src/cli.ts` as `DEFAULT_LAYERS`. Adjust it to match your repo’s folder layout, then rebuild (`npm run build`).
 
 ## Troubleshooting
 
