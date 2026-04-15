@@ -1,5 +1,7 @@
 # [nx-audit](https://www.npmjs.com/package/nx-audit)
 
+<img alt="NPM Downloads" src="https://img.shields.io/npm/dy/nx-audit">
+
 CLI that reads an Nx project graph and reports **circular dependencies** and **orphan projects** (nothing depends on them).
 
 ## Prerequisites
